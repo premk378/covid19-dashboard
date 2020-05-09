@@ -1,0 +1,39 @@
+.card-content{
+  font-family: 'Varela Round', sans-serif;
+  font-size: 36px;
+  font-weight: bold;
+  padding: 30px;
+  color: #030229;
+}
+
+.header{
+  font-family: 'Hind Siliguri', sans-serif !important;
+}
+
+.data-card{
+  padding: 10px !important;
+}
+
+.meta{
+  margin: 8px auto !important;
+  padding: 5px !important;
+  font-family: 'Comfortaa', cursive;
+  font-weight: bold;
+}
+
+.chart-holder{
+  padding: 20px 10px 20px 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+
+.meta-footer{
+  font-family: 'Nunito';
+  font-weight: bold;
+  font-size: 13px;
+  color: #5d5d5d;
+}
+
+nb-card-header{
+  color: #ffffff;
+}

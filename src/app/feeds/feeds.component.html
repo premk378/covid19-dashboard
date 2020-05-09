@@ -1,0 +1,55 @@
+<div class="ui one column stackable grid">
+  <div class="column" style="text-align: right">
+    <div class="ui floating labeled icon dropdown button feed-filter">
+      <i class="filter icon"></i>
+      <span class="text">{{sortArray[0]['desc']}}</span>
+      <div class="menu">
+        <div class="item" (click)="sortFeeds(0)">
+          Popularity
+        </div>
+        <div class="item" (click)="sortFeeds(1)">
+          Relevance
+        </div>
+        <div class="item" (click)="sortFeeds(2)">
+          Pubished
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ui feed" style="height: 550px;overflow: auto;margin-top: 10px">
+  <div *ngIf="newsFeeds.length==0">
+    <div class="ui placeholder" *ngFor="let n of numbers">
+      <div class="image header">
+        <div class="medium line"></div>
+        <div class="full line"></div>
+      </div>
+      <div class="paragraph">
+        <div class="full line"></div>
+        <div class="medium line"></div>
+      </div>
+    </div>
+  </div>
+  <div class="event" *ngFor="let newsFeed of newsFeeds">
+    <div class="content">
+      <div class="summary">
+        <a class="user" href="{{newsFeed.url}}">
+          {{newsFeed.title}}
+        </a>
+        <div class="date">
+          {{newsFeed.author}}
+        </div>
+        <div class="extra text">
+          <div class="ui stackable grid">
+            <div class="five wide column">
+              <img src="{{newsFeed.urlToImage}}" style="height: 80px;width: 95px">
+            </div>
+            <div class="eleven wide column">
+              {{newsFeed.description}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

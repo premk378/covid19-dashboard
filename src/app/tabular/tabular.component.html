@@ -1,0 +1,45 @@
+<div class="ui one column stackable grid">
+  <div class="column">
+    <div class="ui one column stackable grid">
+      <div class="column" style="text-align: right">
+        <div class="ui floating labeled icon dropdown button feed-filter">
+          <i class="filter icon"></i>
+          <span class="text">{{sortType}}</span>
+          <div class="menu">
+            <div class="item" (click)="sortData('Cases')">
+              Cases
+            </div>
+            <div class="item" (click)="sortData('Deaths')">
+              Deaths
+            </div>
+            <div class="item" (click)="sortData('Recovered')">
+              Recovered
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="height: 550px;overflow: auto;margin-top: 10px">
+    <table class="ui celled unstackable table" *ngIf="countryData.length>0">
+      <thead>
+      <tr>
+        <th>Country</th>
+        <th>Cases</th>
+        <th>Deaths</th>
+        <th>Critical</th>
+        <th>Recovered</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let country of countryData|slice:0:100">
+        <td>{{country.country}}</td>
+        <td>{{country.cases}}<p style="color: #F80F0F;font-weight: bold">+{{country.todayCases}}</p></td>
+        <td class="negative">{{country.deaths}}<p style="color: #F80F0F;font-weight: bold">+{{country.todayDeaths}}</p></td>
+        <td class="warning">{{country.critical}}</td>
+        <td class="positive">{{country.recovered}}</td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>

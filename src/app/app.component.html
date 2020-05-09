@@ -1,0 +1,152 @@
+<div class="container-fluid">
+  <nb-layout>
+    <nb-layout-header>
+        <div style="float: left">
+          <img src="assets/images/covid.png">
+        </div>
+        <div style="float: left;text-align: right;width: 100%">
+          <img [src]="selectedCountry.countryInfo.flag" height="24px" width="36px" *ngIf="selectedCountry.country!=undefined">
+          <input #autoInput
+                 nbInput
+                 type="text"
+                 (input)="onChange()"
+                 placeholder="Enter Country Name"
+                 [nbAutocomplete]="auto" style="margin-left: 30px"/>
+
+          <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
+
+            <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+              {{ option }}
+            </nb-option>
+          </nb-autocomplete>
+          <button *ngIf="false" style="margin-left: 30px;padding: 8px" nbButton (click)="showAbout()"><nb-icon icon="alert-circle-outline"></nb-icon></button>
+        </div>
+    </nb-layout-header>
+    <nb-layout-column>
+      <div class="row">
+        <div class="col-md-7">
+          <div class="row">
+            <div class="col-md-6">
+              <nb-card [nbSpinner]="selectedCountry.country==undefined||selectedCountry.country==null" nbSpinnerSize="large" nbSpinnerStatus="primary">
+                <nb-card-header style="background-color: #048E99">TOTAL CASES</nb-card-header>
+                <nb-card-body class="card-content">
+                  {{selectedCountry.cases}}
+                </nb-card-body>
+                <nb-card-footer class="meta-footer">
+                  <span *ngIf="selectedCountry.country!=undefined && selectedCountry.country!=null && selectedCountry.tests!=0">
+                    Out of {{selectedCountry.tests | number}} tests
+                  </span>
+                  <span *ngIf="selectedCountry.country!=undefined && selectedCountry.country!=null && selectedCountry.tests==0">
+                    {{selectedCountry.todayCases | number}} cases today
+                  </span>
+                </nb-card-footer>
+              </nb-card>
+            </div>
+            <div class="col-md-6">
+              <nb-card [nbSpinner]="selectedCountry.country==undefined||selectedCountry.country==null" nbSpinnerSize="large" nbSpinnerStatus="primary">
+                <nb-card-header style="background-color: #081741">ACTIVE CASES</nb-card-header>
+                <nb-card-body  class="card-content">
+                  {{selectedCountry.active}}
+                </nb-card-body>
+                <nb-card-footer class="meta-footer">
+              <span *ngIf="selectedCountry.country!=undefined && selectedCountry.country!=null">
+                {{((selectedCountry.active/selectedCountry.cases)*100).toPrecision(2)}}% of Total Cases
+              </span>
+                </nb-card-footer>
+              </nb-card>
+            </div>
+            <div class="col-md-6">
+              <nb-card [nbSpinner]="selectedCountry.country==undefined||selectedCountry.country==null" nbSpinnerSize="large" nbSpinnerStatus="primary">
+                <nb-card-header style="background-color: #F93E35">DEATHS</nb-card-header>
+                <nb-card-body class="card-content">
+                  {{selectedCountry.deaths}}
+                </nb-card-body>
+                <nb-card-footer class="meta-footer">
+              <span *ngIf="selectedCountry.country!=undefined && selectedCountry.country!=null">
+                {{selectedCountry.todayDeaths}} deaths today
+              </span>
+                </nb-card-footer>
+              </nb-card>
+            </div>
+            <div class="col-md-6">
+              <nb-card [nbSpinner]="selectedCountry.country==undefined||selectedCountry.country==null" nbSpinnerSize="large" nbSpinnerStatus="primary">
+                <nb-card-header style="background-color: #289904">RECOVERED</nb-card-header>
+                <nb-card-body class="card-content">
+                  {{selectedCountry.recovered}}
+                </nb-card-body>
+                <nb-card-footer class="meta-footer">
+              <span *ngIf="selectedCountry.country!=undefined && selectedCountry.country!=null">
+                {{((selectedCountry.recovered/selectedCountry.cases)*100).toPrecision(2)}}% of Total Cases
+              </span>
+                </nb-card-footer>
+              </nb-card>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <nb-card [nbSpinner]="selectedCountry.country==undefined||selectedCountry.country==null" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+            <nb-card-header style="background-color: #07B082">DISTRIBUTION</nb-card-header>
+            <nb-card-body>
+              <app-doughnut [selectedCountry]="selectedCountry"></app-doughnut>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <nb-card [nbSpinner]="selectedCountry.country==undefined||selectedCountry.country==null" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+            <nb-card-header style="background-color: #07B082">CUMULATIVE TREND</nb-card-header>
+            <nb-card-body>
+              <app-line [selectedCountry]="selectedCountry"></app-line>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <nb-card [nbSpinner]="!(countryData.length>0)" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+            <nb-card-header style="background-color: #07B082">
+              COUNTRIES
+            </nb-card-header>
+            <nb-card-body>
+              <app-bar [start]="startValue"></app-bar>
+            </nb-card-body>
+            <nb-card-footer style="text-align: right" *ngIf="countryData.length>0">
+              <button nbButton outline status="success" (click)="changeGraphType('Prev')" [disabled]="startValue<=0"><nb-icon icon="arrow-back-outline"></nb-icon>Prev</button>
+              <button nbButton outline status="success" (click)="changeGraphType('Next')" [disabled]="startValue+20>=countryData.length">Next<nb-icon icon="arrow-forward-outline"></nb-icon></button>
+            </nb-card-footer>
+          </nb-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <nb-card [nbSpinner]="!(countryData.length>0)" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+            <nb-card-header style="background-color: #07B082">MOST IMPACTED COUNTRES</nb-card-header>
+            <nb-card-body>
+              <app-tabular [countryData]="countryData"></app-tabular>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-6">
+          <nb-card status="success">
+            <nb-card-header style="background-color: #07B082">NEWS FEEDS</nb-card-header>
+            <nb-card-body>
+              <app-feeds [selectedCountry]="selectedCountry"></app-feeds>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </nb-layout-column>
+  </nb-layout>
+  <nb-layout-footer>
+    <div class="ui grid">
+      <div class="sixteen wide column" style="text-align: center;font-family: 'Ubuntu', cursive;font-weight: lighter">
+        <p style="font-weight: bold">National Helpline Numbers: <span style="color: #0c85d0">+91-11-23978046 | 1800112545 | 1075</span></p>
+        <p style="font-weight: bold">
+          Developer : <span style="color: #0c85d0">Prem Kumar Yadav (premk378@gmail.com)</span><br>
+        </p>
+      </div>
+    </div>
+  </nb-layout-footer>
+</div>
+
